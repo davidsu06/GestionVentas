@@ -10,9 +10,12 @@ const SalesSchema = mongoose.Schema({
         required: true
     },
     customer: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Customer'
+        type: String,
+        required: true
+    },
+    customerName: {
+        type: String,
+        required: true
     },
     saleReference: {
         type: String,
