@@ -67,12 +67,13 @@ const resolvers = {
 
         getSales: async () => {
             const sales = await Sale.find({});
-
+            console.log(sales)
             let newSales = [];
             
             for await ( const sale of sales ){
+                
                 const customerInfo = await Customer.findById(sale.customer);
-
+                
                 newSales.push(
                     {
                         sale: sale.sale,
