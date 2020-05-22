@@ -67,26 +67,7 @@ const resolvers = {
 
         getSales: async () => {
             const sales = await Sale.find({});
-            console.log(sales)
-            let newSales = [];
-            
-            for await ( const sale of sales ){
-                
-                const customerInfo = await Customer.findById(sale.customer);
-                
-                newSales.push(
-                    {
-                        sale: sale.sale,
-                        id: sale._id,
-                        total: sale.total,
-                        customer: customerInfo.document,
-                        customerName: customerInfo.name + ' ' + customerInfo.lastname,
-                        saleReference: sale.saleReference
-                    }
-                );
-            }
-
-            return newSales;
+            return sales;
         }
     },
 
@@ -248,7 +229,6 @@ const resolvers = {
                 const { reference } = item;
 
                 const product = await Product.findOne({ reference });
-
                 if ( item.units > product.units ) {
                     throw new Error(`El artículo ${product.name} excede la cantidad disponible`);
                 } else {
@@ -258,10 +238,10 @@ const resolvers = {
                 }
             }
 
-            input.customer = customerExists._id;
+            input.customer = customerExists.document;
+            input.customerName = customerExists.name + ' ' + customerExists.lastname;
             customerExists.total = customerExists.total + input.total;
             customerExists.save();
-
             try {
                 const sale = new Sale(input);
                 await sale.save();
